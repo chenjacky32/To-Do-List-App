@@ -1,3 +1,8 @@
+const ListItems = [
+  { id: 1, title: "Java", done: true },
+  { id: 2, title: "Golang", done: false },
+];
+
 function App() {
   return (
     <div className="app">
@@ -30,13 +35,25 @@ function List() {
     <>
       <div className="list">
         <ul>
-          <li>Belajar Java</li>
-          <li>Belajar Golang</li>
+          {ListItems.map((item) => (
+            <Item key={item.id} item={item} />
+          ))}
         </ul>
       </div>
     </>
   );
 }
+
+function Item({ item }) {
+  return (
+    <li>
+      <input type="checkbox" />
+      <span style={{ textDecoration: item.done ? "line-through" : "" }}>{item.title}</span>
+      <button>❌</button>
+    </li>
+  );
+}
+
 function Status() {
   return (
     <>
