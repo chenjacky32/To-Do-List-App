@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const ListItems = [
   { id: 1, title: "Java", done: true },
   { id: 2, title: "Golang", done: false },
@@ -22,6 +24,8 @@ function Logo() {
   );
 }
 function Form() {
+  const [title, setTitle] = useState("");
+
   function Handlesubmit(e) {
     e.preventDefault();
     console.log(e);
@@ -30,7 +34,16 @@ function Form() {
     <>
       <form className="add-form" onSubmit={Handlesubmit}>
         <h3>Silahkan isi apa yg mau dicatat</h3>
-        <input type="text" name="title" id="" />
+        <input
+          type="text"
+          name="title"
+          id=""
+          value={title}
+          onChange={(e) => {
+            console.log(e);
+            setTitle(e.target.value);
+          }}
+        />
         <button>Add</button>
       </form>
     </>
