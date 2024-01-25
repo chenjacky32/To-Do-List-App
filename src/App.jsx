@@ -22,11 +22,17 @@ function Logo() {
   );
 }
 function Form() {
+  function Handlesubmit(e) {
+    e.preventDefault();
+    console.log(e);
+  }
   return (
     <>
-      <div className="add-form">
+      <form className="add-form" onSubmit={Handlesubmit}>
         <h3>Silahkan isi apa yg mau dicatat</h3>
-      </div>
+        <input type="text" name="title" id="" />
+        <button>Add</button>
+      </form>
     </>
   );
 }
