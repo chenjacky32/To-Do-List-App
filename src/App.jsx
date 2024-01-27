@@ -1,17 +1,23 @@
 import { useState } from "react";
 
-const ListItems = [
-  { id: 1, title: "Java", done: true },
-  { id: 2, title: "Golang", done: false },
-];
+// const ListItems = [
+//   { id: 1, title: "Java", done: true },
+//   { id: 2, title: "Golang", done: false },
+// ];
 
 function App() {
+  const [listItem, setListItem] = useState([]);
+
+  function handleadditem(item) {
+    setListItem((listitem) => [...listitem, item]);
+  }
+
   return (
     <>
       <div className="app">
         <Logo></Logo>
-        <Form></Form>
-        <List></List>
+        <Form onadditem={handleadditem}></Form>
+        <List items={listItem}></List>
         <Status></Status>
       </div>
       <div className="todolist">
@@ -85,12 +91,23 @@ function Logo() {
     </>
   );
 }
-function Form() {
+function Form({ onadditem }) {
   const [title, setTitle] = useState("");
 
   function Handlesubmit(e) {
     e.preventDefault();
-    console.log(e);
+
+    if (!title) return;
+
+    const newItem = {
+      id: Date.now(),
+      title,
+      done: false,
+    };
+
+    onadditem(newItem);
+    setTitle("");
+    // console.log(e);
   }
   return (
     <>
@@ -111,12 +128,12 @@ function Form() {
     </>
   );
 }
-function List() {
+function List({ items }) {
   return (
     <>
       <div className="list">
         <ul>
-          {ListItems.map((item) => (
+          {items.map((item) => (
             <Item key={item.id} item={item} />
           ))}
         </ul>
