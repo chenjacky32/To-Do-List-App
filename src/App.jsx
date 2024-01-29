@@ -16,12 +16,26 @@ function App() {
     setListItem((listItem) => listItem.filter((item) => item.id !== id));
   }
 
+  function handetoggleitem(id) {
+    setListItem((ListItems) => {
+      return ListItems.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            done: !item.done,
+          };
+        }
+        return item;
+      });
+    });
+  }
+
   return (
     <>
       <div className="app">
         <Logo></Logo>
         <Form onadditem={handleadditem}></Form>
-        <List items={listItem} onDeleteItems={handledeleteitem}></List>
+        <List items={listItem} onDeleteItems={handledeleteitem} onToggleItem={handetoggleitem}></List>
         <Status></Status>
       </div>
       <div className="todolist">
@@ -78,13 +92,13 @@ function Form({ onadditem }) {
     </>
   );
 }
-function List({ items, onDeleteItems }) {
+function List({ items, onDeleteItems, onToggleItem }) {
   return (
     <>
       <div className="list">
         <ul>
           {items.map((item) => (
-            <Item key={item.id} item={item} onDeleteItems={onDeleteItems} />
+            <Item key={item.id} item={item} onDeleteItems={onDeleteItems} onToggleItem={onToggleItem} />
           ))}
         </ul>
       </div>
@@ -92,10 +106,10 @@ function List({ items, onDeleteItems }) {
   );
 }
 
-function Item({ item, onDeleteItems }) {
+function Item({ item, onDeleteItems, onToggleItem }) {
   return (
     <li>
-      <input type="checkbox" />
+      <input type="checkbox" value={item.done} onChange={() => onToggleItem(item.id)} />
       <span style={{ textDecoration: item.done ? "line-through" : "" }}>{item.title}</span>
       <button onClick={() => onDeleteItems(item.id)}>❌</button>
     </li>
