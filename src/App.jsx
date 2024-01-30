@@ -36,7 +36,7 @@ function App() {
         <Logo></Logo>
         <Form onadditem={handleadditem}></Form>
         <List items={listItem} onDeleteItems={handledeleteitem} onToggleItem={handetoggleitem}></List>
-        <Status></Status>
+        <Status stats={listItem}></Status>
       </div>
       <div className="todolist">
         <Title></Title>
@@ -93,14 +93,37 @@ function Form({ onadditem }) {
   );
 }
 function List({ items, onDeleteItems, onToggleItem }) {
+  const [sortBy, setSortBy] = useState("input");
+
+  function sortItems() {
+    switch (sortBy) {
+      case "title":
+        return items.slice().sort((a, b) => a.title.localeCompare(b.title));
+      case "status":
+        return items.slice().sort((a, b) => Number(a.done) - Number(b.done));
+      case "input":
+      default:
+        return items;
+    }
+  }
+
+  const SortedItems = sortItems();
+
   return (
     <>
       <div className="list">
         <ul>
-          {items.map((item) => (
+          {SortedItems.map((item) => (
             <Item key={item.id} item={item} onDeleteItems={onDeleteItems} onToggleItem={onToggleItem} />
           ))}
         </ul>
+        <div className="action">
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <option value="input">Urutkan berdasarkan input</option>
+            <option value="title">Urutkan berdasarkan judul</option>
+            <option value="status">Urutkan berdasarkan status</option>
+          </select>
+        </div>
       </div>
     </>
   );
@@ -116,11 +139,22 @@ function Item({ item, onDeleteItems, onToggleItem }) {
   );
 }
 
-function Status() {
+function Status({ stats }) {
+  const totalitem = stats.length;
+  const doneitem = stats.filter((item) => item.done).length;
+  const percentage = Math.round((doneitem / totalitem) * 100);
+
+  if (doneitem === 0) {
+    return (
+      <footer className="stats">
+        <span>Silakan isi catatannya </span>
+      </footer>
+    );
+  }
   return (
     <>
       <footer className="stats">
-        <span> &#128221; Kamu punya x catatan yg dichecklist &#9989;</span>
+        <span>{percentage === 100 ? "Catatan sudah diselesaikan" : ` Kamu punya ${totalitem} catatan yg dichecklist ${doneitem} item persentase ${percentage} %`}</span>
       </footer>
     </>
   );
