@@ -30,12 +30,19 @@ function App() {
     });
   }
 
+  function handleClearItems() {
+    const confirm = window.confirm("Yakin mau di hapus semua?");
+    if (confirm) {
+      setListItem([]);
+    }
+  }
+
   return (
     <>
       <div className="app">
         <Logo></Logo>
         <Form onadditem={handleadditem}></Form>
-        <List items={listItem} onDeleteItems={handledeleteitem} onToggleItem={handetoggleitem}></List>
+        <List items={listItem} onDeleteItems={handledeleteitem} onToggleItem={handetoggleitem} onClearItems={handleClearItems}></List>
         <Status stats={listItem}></Status>
       </div>
       <div className="todolist">
@@ -92,7 +99,7 @@ function Form({ onadditem }) {
     </>
   );
 }
-function List({ items, onDeleteItems, onToggleItem }) {
+function List({ items, onDeleteItems, onToggleItem, onClearItems }) {
   const [sortBy, setSortBy] = useState("input");
 
   function sortItems() {
@@ -123,6 +130,7 @@ function List({ items, onDeleteItems, onToggleItem }) {
             <option value="title">Urutkan berdasarkan judul</option>
             <option value="status">Urutkan berdasarkan status</option>
           </select>
+          <button onClick={onClearItems}>Hapus</button>
         </div>
       </div>
     </>
